@@ -1,0 +1,22 @@
+# 视觉模型：硅基流动 SiliconFlow（OpenAI 兼容端点）
+VL_BASE_URL: https://api.siliconflow.cn/v1
+# 存放 key 的环境变量名（key 写在 .env 里，不入库）
+VL_API_KEY_ENV: SILICONFLOW_API_KEY
+# 主模型：Qwen3-VL-30B-A3B（MoE，快且能正确读图）
+# 注意：硅基流动上 Qwen3-VL-32B-Instruct 实测不返回图像内容（返回空/说图是白的），勿用
+# 备选：Qwen/Qwen3-VL-8B-Instruct（快）、Qwen/Qwen3-VL-8B-Thinking
+VL_MODEL: Qwen/Qwen3-VL-30B-A3B-Instruct
+
+# 文本/embedding 不依赖云端，本会话模型做报告润色
+
+# 严重度档位
+severity:
+  high: 高风险(必改)
+  medium: 中风险(建议)
+  low: 低风险(提示)
+
+# 视频拆帧回退（ffmpeg 缺失时只取首帧或跳过）
+ffmpeg_path: ffmpeg
+
+# BM25 案例检索条数
+case_topk: 5

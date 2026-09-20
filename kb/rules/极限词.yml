@@ -1,0 +1,108 @@
+# 极限词/绝对化用语清单（种子库）
+# 字段：term（用于子串匹配的词/短语）、severity、clause、note
+# 严重度：high=必改，medium=建议改，low=提示
+# 注意：部分词需结合语境判断（如"最终"合法、"最低价"违法），命中后由 VL/人工复核
+
+words:
+  # —— "最"字族绝对化 ——
+  - {term: 最好, severity: high, clause: 广告法第9条, note: 绝对化用语"最X"}
+  - {term: 最佳, severity: high, clause: 广告法第9条, note: 绝对化用语"最X"}
+  - {term: 最大, severity: high, clause: 广告法第9条, note: 绝对化用语"最X"}
+  - {term: 最优, severity: high, clause: 广告法第9条, note: 绝对化用语"最X"}
+  - {term: 最强, severity: high, clause: 广告法第9条, note: 绝对化用语"最X"}
+  - {term: 最受欢迎, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 最先进, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 最值得, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 最顶级, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 最低价, severity: high, clause: 广告法第9条, note: 价格绝对化}
+  - {term: 最便宜, severity: high, clause: 广告法第9条, note: 价格绝对化}
+  - {term: 最有效, severity: high, clause: 广告法第9条, note: 功效绝对化}
+  - {term: 最安全, severity: high, clause: 广告法第9条, note: 功效绝对化}
+
+  # —— "第一/顶级/唯一"族 ——
+  - {term: 第一, severity: high, clause: 广告法第9条, note: "排序/销量绝对化（'第一'需有官方数据支撑且标注来源，否则禁用）"}
+  - {term: 顶级, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 顶尖, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 极致, severity: medium, clause: 广告法第9条, note: 接近绝对化，建议规避}
+  - {term: 绝佳, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 绝无仅有, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 唯一, severity: high, clause: 广告法第9条, note: "唯一性绝对化（需有数据支撑，否则禁用）"}
+  - {term: 独家, severity: medium, clause: 广告法第9条, note: 需有授权/资质支撑}
+  - {term: 首家, severity: high, clause: 广告法第9条, note: "首家/首发绝对化，需事实依据"}
+  - {term: 首选, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 全国第一, severity: high, clause: 广告法第9条, note: 排序绝对化}
+  - {term: 销量第一, severity: high, clause: 广告法第9条, note: "销量排序绝对化，需有数据来源"}
+  - {term: 销量冠军, severity: high, clause: 广告法第9条, note: 排序绝对化}
+  - {term: NO.1, severity: high, clause: 广告法第9条, note: 排序绝对化}
+  - {term: no.1, severity: high, clause: 广告法第9条, note: 排序绝对化}
+  - {term: 之王, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 领导者, severity: medium, clause: 广告法第9条, note: 接近绝对化，建议规避}
+  - {term: 领军, severity: medium, clause: 广告法第9条, note: 接近绝对化，建议规避}
+  - {term: 国家级, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 世界级, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 世界级, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 最高级, severity: high, clause: 广告法第9条, note: 法定绝对化用语}
+  - {term: 万能, severity: high, clause: 广告法第9条/第17条, note: 绝对化+功效夸大}
+  - {term: 纯天然, severity: medium, clause: 广告法第17条, note: "食品/化妆品'纯天然'易误导，需成分证据"}
+  - {term: 零添加, severity: medium, clause: 广告法第17条, note: 需成分证据，否则误导}
+  - {term: 无添加, severity: medium, clause: 广告法第17条, note: 需成分证据}
+  - {term: 100%, severity: medium, clause: 广告法第9条/第28条, note: "绝对化数据（如'100%有效'），需数据来源"}
+
+  # —— 功效保证/虚假承诺（尤其医疗/保健/化妆品） ——
+  - {term: 包治, severity: high, clause: 广告法第17条/第18条, note: 医疗/保健食品功效保证}
+  - {term: 包治百病, severity: high, clause: 广告法第18条, note: 保健食品功效保证}
+  - {term: 根治, severity: high, clause: 广告法第16条/第18条, note: 医疗/保健功效保证}
+  - {term: 疗效, severity: high, clause: 广告法第18条, note: "保健食品不得涉及疾病预防/治疗功能"}
+  - {term: 治愈, severity: high, clause: 广告法第16条, note: 医疗功效保证}
+  - {term: 治愈率, severity: high, clause: 广告法第16条, note: 医疗广告不得含有效率/治愈率}
+  - {term: 有效率, severity: high, clause: 广告法第16条, note: 医疗广告不得含有效率}
+  - {term: 无效退款, severity: high, clause: 广告法第28条, note: 功效保证/易引人误解}
+  - {term: 无副作用, severity: high, clause: 广告法第16条/第18条, note: 功效保证}
+  - {term: 立竿见影, severity: high, clause: 广告法第16条/第28条, note: 功效夸大}
+  - {term: 药到病除, severity: high, clause: 广告法第16条, note: 医疗功效保证}
+  - {term: 神效, severity: high, clause: 广告法第28条, note: 功效夸大}
+  - {term: 神奇疗效, severity: high, clause: 广告法第16条/第28条, note: 功效夸大}
+  - {term: 延年益寿, severity: high, clause: 广告法第18条, note: 保健食品功效保证}
+  - {term: 减肥, severity: medium, clause: 广告法第18条, note: "保健食品不得宣称减肥等功能（普通食品严禁）"}
+
+  # —— 投资理财保证 ——
+  - {term: 保本, severity: high, clause: 广告法第25条/金融法规, note: 金融理财收益保证}
+  - {term: 保收益, severity: high, clause: 广告法第25条, note: 金融收益保证}
+  - {term: 稳赚, severity: high, clause: 广告法第25条, note: 金融收益保证}
+  - {term: 稳赚不赔, severity: high, clause: 广告法第25条, note: 金融收益保证}
+  - {term: 零风险, severity: high, clause: 广告法第25条, note: 金融风险保证}
+  - {term: 无风险, severity: high, clause: 广告法第25条, note: 金融风险保证}
+  - {term: 100%收益, severity: high, clause: 广告法第25条, note: 金融收益保证}
+
+  # —— 时效/承诺绝对化 ——
+  - {term: 永久, severity: high, clause: 广告法第9条/第28条, note: 时效绝对化}
+  - {term: 终身, severity: medium, clause: 广告法第28条, note: "时效承诺，需可兑现"}
+  - {term: 史无前例, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 前无古人, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 举世无双, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 独一无二, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 全国首创, severity: high, clause: 广告法第9条, note: 绝对化用语}
+  - {term: 全球首发, severity: medium, clause: 广告法第9条, note: 需事实依据}
+
+  # —— 引证/数据造假 ——
+  - {term: 驰名商标, severity: high, clause: 广告法第10条/商标法, note: "不得在广告中宣称'驰名商标'（用于广告宣传本身违法）"}
+  - {term: 国家免检, severity: high, clause: 广告法第10条, note: "不得使用国家免检等失效/伪造资质"}
+  - {term: 央视上榜, severity: medium, clause: 广告法第28条, note: 引证易引人误解}
+  - {term: 明星同款, severity: low, clause: 广告法第14条, note: "若明星未代言，涉嫌虚假代言"}
+
+  # —— 诱导/误导 ——
+  - {term: 免费领, severity: medium, clause: 广告法第28条, note: "免费噱头需真实可兑现，否则虚假"}
+  - {term: 抽中, severity: medium, clause: 广告法第28条, note: "抽奖式营销需真实，不得虚构中奖"}
+  - {term: 限量, severity: low, clause: 广告法第28条, note: "限量需真实，否则引人误解"}
+
+  # —— 教育/招商保证 ——
+  - {term: 包过, severity: high, clause: 广告法第24条, note: 教育培训效果保证}
+  - {term: 包就业, severity: high, clause: 广告法第24条, note: 教育培训效果保证}
+  - {term: 保过, severity: high, clause: 广告法第24条, note: 教育培训效果保证}
+  - {term: 一次性通过, severity: high, clause: 广告法第24条, note: 教育培训效果保证}
+  - {term: 稳赚加盟, severity: high, clause: 广告法第25条, note: 招商加盟收益保证}
+  - {term: 零风险加盟, severity: high, clause: 广告法第25条, note: 招商加盟风险保证}
+
+  # —— 低俗/不良导向 ——
+  - {term: 低俗, severity: medium, clause: 广告法第9条, note: 妨碍社会公共秩序/良好风尚}
+  - {term: 性暗示, severity: high, clause: 广告法第9条, note: 含淫秽/色情不良内容}

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>千川内容平台</title>
+<style>
+  :root{--high:#DC2626;--mid:#D97706;--low:#0891B2;--blue:#2B6BFF;--ink:#0F172A;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:linear-gradient(155deg,#F4F9FF 0%,#E3EEFF 55%,#D2E3FF 100%);min-height:100vh;
+       font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:var(--ink);}
+  .wrap{max-width:860px;margin:0 auto;padding:36px 20px 80px;}
+  header{text-align:center;margin-bottom:28px;}
+  header .logo{font-size:34px;font-weight:800;letter-spacing:2px;
+    background:linear-gradient(90deg,#2B6BFF,#6A3BFF);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  header .sub{color:#64748B;font-size:14px;margin-top:6px;}
+  .card{background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(15,23,42,.08),0 8px 24px rgba(15,23,42,.06);
+        padding:28px 32px;margin-bottom:20px;}
+  .drop{border:2px dashed #A5C0F0;border-radius:14px;background:#F7FAFF;padding:40px 20px;text-align:center;
+        cursor:pointer;transition:.15s;}
+  .drop:hover,.drop.over{background:#EEF4FF;border-color:var(--blue);}
+  .drop .big{font-size:17px;font-weight:600;color:#334155;}
+  .drop .hint{font-size:13px;color:#94A3B8;margin-top:6px;}
+  .filelist{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px;}
+  .filelist li{background:#EEF4FF;border:1px solid #D6E3F8;border-radius:999px;padding:5px 12px;font-size:13px;
+               display:flex;align-items:center;gap:8px;max-width:100%;}
+  .filelist li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .filelist li em{color:#94A3B8;font-style:normal;font-size:12px;}
+  .filelist li a{color:#DC2626;cursor:pointer;text-decoration:none;font-weight:700;}
+  label.sec{display:block;font-size:14px;font-weight:600;color:#334155;margin:18px 0 8px;}
+  textarea{width:100%;min-height:110px;border:1px solid #D6E3F8;border-radius:10px;padding:12px 14px;font-size:14px;
+           font-family:inherit;resize:vertical;background:#F7FAFF;}
+  textarea:focus,input:focus{outline:2px solid #B9CFF6;}
+  input[type=text]{width:100%;border:1px solid #D6E3F8;border-radius:10px;padding:10px 14px;font-size:14px;background:#F7FAFF;}
+  .row{display:flex;gap:14px;align-items:center;margin-top:20px;}
+  button.go{flex:1;background:linear-gradient(90deg,#2B6BFF,#6A3BFF);color:#fff;border:none;border-radius:12px;
+            padding:14px;font-size:17px;font-weight:700;letter-spacing:6px;cursor:pointer;box-shadow:0 8px 20px rgba(43,107,255,.35);}
+  button.go:disabled{opacity:.5;cursor:not-allowed;}
+  .hintline{font-size:12px;color:#94A3B8;}
+  #progress{display:none;}
+  .bar{height:8px;background:#E2E8F0;border-radius:4px;overflow:hidden;margin-bottom:16px;}
+  .bar-fill{height:100%;width:0;background:linear-gradient(90deg,#2B6BFF,#6A3BFF);transition:width .3s;}
+  .spinner{width:38px;height:38px;border:4px solid #D6E3F8;border-top-color:var(--blue);border-radius:50%;
+           margin:0 auto 14px;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .stage{font-size:15px;font-weight:600;color:#334155;}
+  .msg{font-size:13px;color:#64748B;margin-top:4px;}
+  .elapsed{font-size:12px;color:#94A3B8;margin-top:10px;}
+  #result{display:none;}
+  iframe{width:100%;height:72vh;border:1px solid #E2E8F0;border-radius:12px;background:#fff;}
+  .actions{display:flex;gap:12px;margin-top:14px;}
+  .actions a{flex:1;text-align:center;background:#F1F5F9;border:1px solid #E2E8F0;border-radius:10px;
+             padding:10px;color:#334155;text-decoration:none;font-size:14px;}
+  .actions a:hover{background:#E2E8F0;}
+  .err{background:#FEF2F2;border:1px solid #FECACA;color:var(--high);border-radius:10px;padding:14px 18px;font-size:14px;}
+  .done-badges{display:flex;gap:10px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+  .badge{padding:6px 16px;border-radius:999px;font-weight:700;font-size:14px;}
+  .badge.ok{background:#DCFCE7;color:#16A34A;}
+  .badge.bad{background:#FEE2E2;color:var(--high);}
+  .badge.n{background:#F1F5F9;color:#334155;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">千川内容平台</div>
+    <div class="sub">广告物料合规检测 · 上传海报、长图、视频或文案，自动比对《广告法》《互联网广告管理办法》及敏感类目规定，并引用相似处罚案例</div>
+  </header>
+
+  <div class="card" id="uploadCard">
+    <div class="drop" id="drop">
+      <div class="big">拖拽文件到这里，或点击选择</div>
+      <div class="hint">支持 图片（jpg/png/webp）· 视频（mp4/mov/webm）· 文档（txt/md/docx/pdf/xlsx/pptx），可多选</div>
+      <input type="file" id="fileInput" multiple hidden
+             accept=".jpg,.jpeg,.png,.webp,.bmp,.mp4,.mov,.webm,.mkv,.avi,.txt,.md,.docx,.pdf,.xlsx,.pptx">
+    </div>
+    <ul class="filelist" id="filelist"></ul>
+
+    <label class="sec">或直接粘贴文案</label>
+    <textarea id="pasted" placeholder="粘贴需要检测的广告文案、直播话术、详情页描述…"></textarea>
+
+    <label class="sec">物料名称（可选，用于报告命名）</label>
+    <input type="text" id="matname" placeholder="例如：双十一主视觉 / 抖音短视频脚本">
+
+    <div class="row">
+      <button class="go" id="goBtn">开 始 检 测</button>
+    </div>
+    <div class="hintline" style="margin-top:10px;">检测在本地流水线完成；图片/视频会调用视觉大模型分析，需要 1-3 分钟。</div>
+  </div>
+
+  <div class="card" id="progress">
+    <div class="bar"><div class="bar-fill" id="bar"></div></div>
+    <div class="spinner" id="spin"></div>
+    <div class="stage" id="stage">准备中…</div>
+    <div class="msg" id="msg"></div>
+    <div class="elapsed" id="elapsed"></div>
+  </div>
+
+  <div class="card" id="errorCard" style="display:none;">
+    <div class="err" id="errMsg"></div>
+    <div class="row"><button class="go" id="retryBtn" style="letter-spacing:2px;">返 回 重 新 上 传</button></div>
+  </div>
+
+  <div class="card" id="result">
+    <div class="done-badges" id="badges"></div>
+    <iframe id="reportFrame"></iframe>
+    <div class="actions">
+      <a id="openNew" target="_blank">在新窗口打开完整报告</a>
+      <a href="/" >再检测一批</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const drop = document.getElementById('drop');
+const fileInput = document.getElementById('fileInput');
+const filelist = document.getElementById('filelist');
+const pasted = document.getElementById('pasted');
+const matname = document.getElementById('matname');
+const goBtn = document.getElementById('goBtn');
+let picked = [];
+
+drop.onclick = () => fileInput.click();
+drop.ondragover = e => { e.preventDefault(); drop.classList.add('over'); };
+drop.ondragleave = () => drop.classList.remove('over');
+drop.ondrop = e => {
+  e.preventDefault(); drop.classList.remove('over');
+  for (const f of e.dataTransfer.files) addFile(f);
+};
+fileInput.onchange = () => { for (const f of fileInput.files) addFile(f); fileInput.value = ''; };
+
+function addFile(f) {
+  if (picked.some(x => x.name === f.name && x.size === f.size)) return;
+  picked.push(f); renderList();
+}
+function renderList() {
+  filelist.innerHTML = '';
+  picked.forEach((f, i) => {
+    const li = document.createElement('li');
+    const size = f.size > 1048576 ? (f.size/1048576).toFixed(1)+'MB' : Math.round(f.size/1024)+'KB';
+    li.innerHTML = `<span>${esc(f.name)}</span><em>${size}</em><a data-i="${i}">✕</a>`;
+    li.querySelector('a').onclick = () => { picked.splice(i,1); renderList(); };
+    filelist.appendChild(li);
+  });
+}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+goBtn.onclick = async () => {
+  if (!picked.length && !pasted.value.trim()) { alert('请先上传文件或粘贴文案'); return; }
+  goBtn.disabled = true; goBtn.textContent = '检 测 中…';
+  show('progress'); setBar(0); setStage('upload', '正在上传物料…');
+  try {
+    const fd = new FormData();
+    picked.forEach(f => fd.append('files', f));
+    fd.append('text', pasted.value);
+    fd.append('name', matname.value);
+    const up = await uploadWithProgress(fd);
+    const { job } = up;
+    setBar(100); setStage('rules', '上传完成，启动检测…');
+    const r = await fetch(`/api/review/${job}`, { method: 'POST' });
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e.detail || `启动检测失败（${r.status}）`);
+    }
+    poll(job);
+  } catch (e) {
+    showError(e.message || String(e));
+  }
+};
+
+function uploadWithProgress(fd) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/upload');
+    xhr.upload.onprogress = e => {
+      if (e.lengthComputable) {
+        const pct = Math.round(e.loaded / e.total * 100);
+        setBar(pct); setStage('upload', `正在上传物料 ${pct}%`);
+      }
+    };
+    xhr.onload = () => {
+      let res = {};
+      try { res = JSON.parse(xhr.responseText); } catch (err) {}
+      if (xhr.status >= 200 && xhr.status < 300) resolve(res);
+      else reject(new Error(res.detail || `上传失败（${xhr.status}）`));
+    };
+    xhr.onerror = () => reject(new Error('无法连接检测服务（服务可能未启动），请双击桌面"合规检测系统"后再试'));
+    xhr.ontimeout = () => reject(new Error('上传超时，请重试'));
+    xhr.send(fd);
+  });
+}
+
+function poll(job) {
+  const t0 = Date.now();
+  let fails = 0;
+  const timer = setInterval(async () => {
+    if (Date.now() - t0 > 15 * 60 * 1000) { clearInterval(timer); showError('检测超时（15 分钟），请重试'); return; }
+    let resp;
+    try {
+      resp = await fetch(`/api/status/${job}`);
+    } catch (e) {
+      fails++;
+      if (fails >= 3) { clearInterval(timer); showError('无法连接检测服务，请确认服务已启动'); }
+      return;
+    }
+    if (resp.status === 404) {
+      clearInterval(timer);
+      showError('任务已丢失（服务可能重启过），请刷新页面重新上传检测');
+      return;
+    }
+    if (!resp.ok) {
+      fails++;
+      if (fails >= 3) { clearInterval(timer); showError(`状态查询失败（${resp.status}）`); }
+      return;
+    }
+    fails = 0;
+    const s = await resp.json();
+    setStage(s.stage, s.message || '', s.elapsed);
+    if (s.status === 'done') { clearInterval(timer); showResult(job, s); }
+    if (s.status === 'error') { clearInterval(timer); showError(s.error || '检测失败'); }
+  }, 1500);
+}
+
+function setBar(pct) { document.getElementById('bar').style.width = pct + '%'; }
+
+function setStage(stage, msg, elapsed) {
+  const map = {upload:'上传物料', load_kb:'加载知识库', scan:'扫描物料', rules:'规则匹配',
+               cases:'检索相似案例', vl:'视觉模型审核', report:'生成报告', done:'完成'};
+  document.getElementById('stage').textContent = map[stage] || stage || '处理中…';
+  document.getElementById('msg').textContent = msg || '';
+  document.getElementById('elapsed').textContent = elapsed ? `已用时 ${elapsed} 秒` : '';
+}
+function show(id) {
+  // 注意：这几个卡片的初始隐藏写在 CSS 里（#progress{display:none} 等），
+  // 显示时必须显式设 display:block，置空会回落到样式表的 none 导致整页空白
+  for (const x of ['uploadCard','progress','errorCard','result'])
+    document.getElementById(x).style.display = x === id ? 'block' : 'none';
+}
+function showError(msg) {
+  show('errorCard');
+  document.getElementById('errMsg').textContent = '检测失败：' + msg;
+  goBtn.disabled = false; goBtn.textContent = '开 始 检 测';
+}
+document.getElementById('retryBtn').onclick = () => { show('uploadCard'); goBtn.disabled = false; };
+
+function showResult(job, s) {
+  show('result');
+  goBtn.disabled = false; goBtn.textContent = '开 始 检 测';
+  document.getElementById('reportFrame').src = `/report/${job}`;
+  document.getElementById('openNew').href = `/report/${job}`;
+  const b = document.getElementById('badges');
+  const sm = s.summary || {};
+  const v = sm.verdict || '';
+  b.innerHTML =
+    `<span class="badge ${v==='通过'?'ok':'bad'}">${esc(v)}</span>` +
+    `<span class="badge n">高风险 ${sm.by_severity?.high ?? 0}</span>` +
+    `<span class="badge n">中风险 ${sm.by_severity?.medium ?? 0}</span>` +
+    `<span class="badge n">低风险 ${sm.by_severity?.low ?? 0}</span>`;
+}
+</script>
+</body>
+</html>

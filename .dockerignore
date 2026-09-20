@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.pyc
+.env
+config.env
+uploads
+reports
+.git
+.DS_Store
+*.command
