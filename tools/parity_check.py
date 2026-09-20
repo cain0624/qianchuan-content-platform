@@ -222,6 +222,7 @@ def main() -> int:
                 continue
             left_label, right_label = "后端", "浏览器"
             left = project(path, http_call(path, body, method))
+            right = ref
         else:
             left = project(path, http_call(path, body, method))
             right = project(path, facade_call(path, body, method))

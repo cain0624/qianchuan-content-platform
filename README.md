@@ -11,6 +11,8 @@
 
 纯 Pillow 渲染 + FastAPI + 零构建前端，**无需任何 API Key 即可完整演示**。
 
+**线上地址（无需后端，打开即用）**：<https://cain0624.github.io/qianchuan-content-platform/>
+
 ```bash
 ./run.sh              # 前台启动  → http://127.0.0.1:8848
 python3 daemon.py start   # 或后台常驻（setsid 开新会话，不受终端回收影响）
@@ -212,12 +214,21 @@ insurance-live-cover-agent/
 │  ├─ harness.py          # 调度内核（八层编排 + 闭环）+ rerender + 平台/版式透传
 │  ├─ llm.py              # 可选接真实 LLM（无 Key 走离线合成器）
 │  └─ trace.py            # Trace 事件流与复盘（含版式行）
+├─ fonts/                 # 子集化字体（4 ttf + 4 ttf.gz，10.6MB / gzip 8.3MB），随站点分发
 ├─ static/                # 零构建前端（浅蓝渐变产品风格）
+│  ├─ bridge.js           # 运行时桥：探测后端 → 有则走 HTTP，无则拉起 Pyodide 跑 api_facade
+│  └─ app.js              # 前端逻辑，所有请求收敛到单一出口 api()
 ├─ assets/                # 素材落盘 + assets.json 索引
 ├─ outputs/               # 封面产出 + showcase 示例总览
 ├─ tools/
+│  ├─ subset_fonts.py     # 系统字体 → GB2312 子集（改配色/字集后重跑即可）
+│  ├─ build_site.py       # 组装 dist/ 发布目录（含 py-manifest.json 引擎清单）
+│  ├─ deploy_github.py    # Git Data API 原子提交 + 开 Pages（token 从钥匙串取）
+│  ├─ parity_check.py     # 对拍：真实后端 vs api_facade / 浏览器引擎
+│  ├─ smoke_platforms.py  # 后端回归：4 类产出物 × 有人物/纯图文
 │  ├─ make_showcase.py    # 重新生成 outputs/showcase/ 下的 8 张总览图
 │  └─ patch_platforms.py  # 幂等注入平台预设与新平台模板（改配色后重跑即可）
+├─ api_facade.py          # server.py 路由层的纯函数等价物，跑在 Pyodide 里
 ├─ server.py              # FastAPI 接口
 ├─ run.sh                 # 前台启动
 └─ daemon.py              # 后台常驻（setsid 开新会话）
@@ -267,3 +278,76 @@ insurance-live-cover-agent/
 | `10_年轻化_5套色系总览.png` | 年轻化 5 套色系（紫蓝 / 青蓝 / 珊瑚粉 / 薄荷绿 / 琥珀金） |
 | `11_同一文案_经典vs年轻.png` | 同一文案在经典族与年轻化族下的效果差异 |
 | `12_示例_多主题竖版.png` | 5 个典型主题的 9:16 竖版产出 |
+
+## 十、线上部署（无后端也能跑）
+
+**线上地址**：<https://cain0624.github.io/qianchuan-content-platform/>
+**仓库**：<https://github.com/cain0624/qianchuan-content-platform>（public）
+
+### 10.1 为什么没有后端也能跑
+
+GitHub Pages 只能托管静态文件，不能跑 Python。所以把**同一份 `core/`** 通过 WebAssembly 搬进浏览器：
+
+```
+浏览器                              服务器（本机）
+┌────────────────────────┐         ┌──────────────────┐
+│ app.js                 │         │ FastAPI server.py│
+│   api(path, body)      │         │   core/*.py      │
+│        │               │         └──────────────────┘
+│   bridge.js 探测 ./api/health
+│        ├─ 200 且 JSON ───┼── HTTP ──► 真后端
+│        └─ 否则          │
+│             Pyodide + Pillow
+│             api_facade.py ──► 同一份 core/
+└────────────────────────┘
+```
+
+- `static/bridge.js` 探测 `./api/health`，**必须同时满足 200 且 content-type 是 JSON**。只判 200 会踩坑：SPA 兜底会把 `index.html` 以 200 吐回来，前端会误判"有后端"。
+- 走 Pyodide 时 `Pillow 10.2.0` 在 Pyodide v0.26.4 包清单里是**零依赖**的，`loadPackage("pillow")` 直接可用（实测 30 项能力全绿：中文 truetype、带 alpha 合成、GaussianBlur、ImageChops.multiply、抠底依赖的 floodfill、1080×1440 全流程）。
+- 业务代码零改动：`api_facade.py` 只重写 `server.py` 的**路由层**，`core/` 是同一份文件、同一套扁平 import。
+
+### 10.2 字体：90.5MB → 10.61MB
+
+macOS 系统字体线上不存在（且 23.5MB / 66.9MB 太大），用 `tools/subset_fonts.py` 按 GB2312 字集裁字形：
+
+| 字体 | 子集后 | gzip |
+|---|---|---|
+| sans-regular（Hiragino Sans GB） | 2509.8 KB | 2256.3 KB |
+| sans-bold | 2570.4 KB | 2333.3 KB |
+| serif-regular（Songti） | 2839.4 KB | 1919.6 KB |
+| serif-bold | 2942.1 KB | 1999.0 KB |
+| **合计** | **10.61 MB** | **8.31 MB** |
+
+- 覆盖验证：项目数据 896 个非 ASCII 字符**零缺失**，15 条常见句子 163 字符**零缺失**；仅 7 个 GB2312 外极生僻字（濛燚甦靐飝齾龘）不在集内。
+- **不要加 `--no-hinting`** —— Hiragino 是 CFF 字体，hint 操作符在 charstring 里，剥掉后抗锯齿边缘会挪位，实测 2.3% 像素差、最大通道差 255。去掉后体积只涨 1.7%，与系统字体渲染**逐像素一致**。`--desubroutinize` 在这里是反向优化。
+- **不要加 `--no-subset-tables+=cmap`** —— cmap 保留全部码点而字形被裁，编译时按字形名回查直接 `KeyError: 'cid22354'`（错误信息完全看不出是参数问题）。
+- 字体走 **jsdelivr CDN 直连仓库**：同一个 2.3MB 字体 jsdelivr 3.7s vs Pages 32.5s（快 8.7 倍）。**但代码与数据必须走同源相对路径**——CDN 对分支有缓存，改完不生效。
+
+### 10.3 发布流程
+
+```bash
+python3 tools/subset_fonts.py     # 1. 字体子集化（改了配色/字集才需要）
+python3 tools/smoke_platforms.py  # 2. 后端回归 8/8
+python3 tools/parity_check.py     # 3. 对拍：真后端 vs api_facade
+python3 tools/build_site.py       # 4. 组装 dist/
+python3 tools/deploy_github.py    # 5. 原子提交 + 开 Pages（token 从钥匙串读，不落盘不打印）
+```
+
+### 10.4 为什么用 Git Data API 而不是 git push
+
+本机到 github.com 的 smart-http 会 `Empty reply from server`，代理下 `CONNECT tunnel failed 502` —— 但 REST API 照样通。所以 `deploy_github.py` 走 `blob → tree → commit → ref` 一次原子提交（多文件只产生一个 commit），`PATCH refs` 偶发 500 会重试一次，最后回读 `commits/main` 校验并轮询 Pages 到 `built`。
+
+### 10.5 两个只在线上才暴露的坑
+
+1. **`api_facade.py` 没进引擎清单** → 线上 `ModuleNotFoundError: No module named 'api_facade'`。`tools/build_site.py` 把它复制进了 `dist/`，但没计入 `py-manifest.json` 的 core 清单，所以没装进虚拟文件系统。**本地怎么测都测不出来**——本地走 HTTP 模式，压根不装虚拟 FS。修法：`copy_file` 之后 `core_files.append(rel)`。
+2. **`.nojekyll` 必须加** —— 不加则 Jekyll 会吃掉 `assets/_builtin/` 这类下划线开头的目录。
+3. **`core/guard.py` 命中词排序依赖 CPython hash 随机化**（`sorted(set(matched), key=len)`）→ 同一段文案在不同进程里命中词顺序不同。这是真实缺陷，不只是对拍问题，已改为按 `(-len, patterns 书写顺序)` 完全确定排序。
+
+### 10.6 一致性验证结果
+
+| 验证项 | 结果 |
+|---|---|
+| 本地后端 vs 本地门面（`parity_check.py`） | **8/8 一致** |
+| 本地后端 vs 线上浏览器引擎（`--against-browser`） | **1/1 逐字段一致** |
+| 线上文件 vs 本地 `dist/`（8 个关键文件） | 全部 `✓ same`（用 `Accept-Encoding: identity` 排除再压缩干扰） |
+| 线上端到端生成 | `mode=bridge` 装载成功，1080×1080 产出，首屏完整，合规 PASS(0)、CTR 100/100，控制台零报错 |
