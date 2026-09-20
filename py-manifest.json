@@ -6,6 +6,7 @@
   "./"
  ],
  "core": [
+  "api_facade.py",
   "assets/_builtin/portrait.png",
   "assets/as_demo_host_示例主播头像.png",
   "assets/as_demo_logo_示例机构标识.png",

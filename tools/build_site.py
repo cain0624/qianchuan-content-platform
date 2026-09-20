@@ -121,10 +121,15 @@ def main() -> int:
         print(f"  fonts/{fam}  {len(items)} 个字重，传输 {total/1024/1024:.2f} MB（gzip）")
 
     # ---- 前端静态资源 + 门面
+    # 注意：ROOT_FILES 里的 api_facade.py 属于**引擎代码**，必须计入 core 清单 ——
+    # 否则它不会被装进浏览器的虚拟文件系统，`import api_facade` 直接 ModuleNotFound。
+    # 这个坑只在线上出现（本地走 HTTP 模式，压根不装虚拟 FS），本地怎么测都测不出来。
     for rel in STATIC_FILES + ROOT_FILES:
         src = os.path.join(ROOT, rel)
         if os.path.isfile(src):
             copy_file(src, os.path.join(out, rel))
+            if rel in ROOT_FILES:
+                core_files.append(rel)
     # index.html 复制到根
     copy_file(os.path.join(ROOT, "static", "index.html"), os.path.join(out, "index.html"))
     print("  前端与门面已复制")
