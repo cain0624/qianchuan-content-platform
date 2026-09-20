@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>千川内容平台</title>
+<!-- 资源一律用相对路径。
+     这个 index.html 同时被两处服务：本地 FastAPI 挂在 `/`，
+     线上 GitHub Pages 挂在 `/<repo>/`。写成绝对路径 `/static/...`
+     在线上会请求到域名根目录下、直接 404 —— 而本地测试完全看不出问题。 -->
+<link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">千川内容平台</div>
+    <div class="sub">输入一句主题，自动产出<b>内容分段设计</b>与<b>封面</b>；覆盖直播间封面 / 小红书图文 / 抖音图文 / 抖音视频封面</div>
+    <div class="meta-row">
+      <span class="badge n" id="healthTxt">模型：检测中…</span>
+      <span class="badge n" id="tplCount">0 套模板</span>
+      <span class="badge n" id="ruleCount">共 0 条硬规则</span>
+      <span class="badge n" id="modeHint">离线可跑 · 无需 API Key</span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- ================= 左栏：输入 ================= -->
+    <div class="col">
+      <section class="card">
+        <h2 class="card-tt"><i>01</i>直播主题</h2>
+
+        <div class="row2">
+          <div><label class="sec">产出物类型</label><select id="outputPlatform"></select></div>
+          <div><label class="sec">投放平台</label><select id="platform"></select></div>
+        </div>
+
+        <label class="sec">主题（只填这一句，其余自动推断）</label>
+        <textarea id="theme" placeholder="例如：利率下行，普通人怎么守住钱袋子"></textarea>
+        <div class="chips" id="themeChips"></div>
+
+        <label class="sec">封面视觉风格</label>
+        <div class="fam-switch" id="famSwitch"></div>
+        <div class="hintline" id="famNote"></div>
+
+        <label class="sec">构图模板 <span class="hint">不选则按主题自动匹配</span></label>
+        <div class="tpl-pick" id="tplPickInit"></div>
+
+        <div class="row2">
+          <div><label class="sec">开播时间（角标）</label><input type="text" id="badge" placeholder="9月22日 20:00" value="9月22日 20:00"></div>
+          <div><label class="sec">机构 / 署名</label><input type="text" id="institution" placeholder="安心保险研究院" value="安心保险研究院"></div>
+        </div>
+
+        <label class="sec">输出尺寸 <span class="hint" id="sizeHint">按产出物类型带出平台推荐尺寸</span></label>
+        <div class="chips" id="sizePicks"></div>
+
+        <div class="row2">
+          <div><label class="sec">直播时长（分钟）</label><input type="text" id="duration" value="60"></div>
+          <div><label class="sec">合规重试上限</label><input type="text" id="maxRetry" value="2"></div>
+        </div>
+
+        <label class="sec">Prompt 版本</label>
+        <select id="variant">
+          <option value="v2_safe">合规版（默认）</option>
+          <option value="v1_risky">v1 激进版（演示打回重做）</option>
+        </select>
+
+        <div class="row"><button class="go" id="btnGen">生 成</button></div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-tt"><i>02</i>主播素材 <span class="pill-tag" id="layoutTag">—</span></h2>
+        <div class="hintline" style="margin-bottom:12px">
+          <b>可选</b>：不上传素材默认走<b>无人物版式</b>（文案居中通栏 + 底部图标卡）；
+          挂上<b>主播半身像</b>则走<b>人物版式</b>——半身像与文案错位排布，人物底部柔化出血融入背景。
+        </div>
+        <div class="drop" id="drop">
+          <div class="big">上传主播半身像 / 机构 Logo（可选）</div>
+          <div class="hint">拖拽图片到这里，或点击选择 · 支持 jpg / png / webp · 半身像自动去留白 + 取头肩 + 可选抠底</div>
+          <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.bmp" hidden multiple>
+        </div>
+        <label class="chk" id="cutoutChk"><input type="checkbox" id="cutout" checked>
+          <span>自动抠底<em>半身像去掉纯色背景 → 立绘出血融入封面（失败自动回退拱形人物卡）</em></span></label>
+        <ul class="filelist" id="filelist"></ul>
+        <div id="pendBox" class="hidden">
+          <label class="sec">确认素材信息后上传</label>
+          <div id="pendList"></div>
+          <div class="row"><button class="go sm" id="btnUpload">上 传 入 库</button></div>
+        </div>
+
+        <label class="sec">主播半身像 <span class="hint">可选 · 挂了走人物版式，不挂即无人物版式</span></label>
+        <div class="asset-grid" id="assetPortrait"></div>
+
+        <label class="sec">机构 Logo <span class="hint">可选 · 出现在签名胶囊 / 底部图标卡</span></label>
+        <div class="asset-grid" id="assetLogo"></div>
+      </section>
+    </div>
+
+    <!-- ================= 中栏：产出 ================= -->
+    <div class="col">
+      <section class="card">
+        <h2 class="card-tt"><i>03</i>产出<a class="go-check" href="https://lists-scripting-ripe-phi.trycloudflare.com/" target="_blank" rel="noopener noreferrer">去检测</a></h2>
+        <div id="emptyState" class="empty">
+          <div class="empty-ico">✧</div>
+          <p>左侧输入一句直播主题，点「生成」<br>
+            <span class="hint">产出：多尺寸封面 · 封面文案组合 · 内容分段设计 · 合规预检报告 · 点击率要素自查</span></p>
+        </div>
+        <div id="result" class="hidden"></div>
+      </section>
+    </div>
+
+    <!-- ================= 右栏：链路与数据 ================= -->
+    <div class="col">
+      <section class="card">
+        <div class="tabs" id="tabs">
+          <button class="tab active" data-tab="pipeline">编排链路</button>
+          <button class="tab" data-tab="guard">对抗压测</button>
+          <button class="tab" data-tab="metrics">数据回流</button>
+          <button class="tab" data-tab="templates">模板规范</button>
+        </div>
+
+        <div id="tab-pipeline">
+          <div id="traceSum" class="trace-sum"><span class="hint">等待生成…</span></div>
+          <div id="pipeline" class="pipeline"></div>
+        </div>
+
+        <div id="tab-guard" class="hidden">
+          <div class="hintline" style="margin:14px 0 10px">直接送一段文案进 L4 硬规则闸，验证命中判定（不经过生成侧）。</div>
+          <textarea id="atkInput" placeholder="粘贴要压测的封面文案 / 直播话术…" style="min-height:78px"></textarea>
+          <div class="chips" id="atkChips"></div>
+          <div class="row"><button class="go sm" id="btnAtk">开 始 检 测</button></div>
+          <div id="atkResult"></div>
+        </div>
+
+        <div id="tab-metrics" class="hidden">
+          <label class="sec">关键指标</label>
+          <div class="kpi-grid" id="kpiGrid"></div>
+          <label class="sec">高频违规类型 TOP</label>
+          <div id="topViolations"></div>
+          <label class="sec">打回轮次分布</label>
+          <div id="retryDist"></div>
+          <label class="sec">最近生成记录</label>
+          <div id="logList" class="log-list"></div>
+        </div>
+
+        <div id="tab-templates" class="hidden">
+          <label class="sec">两种排版（由素材自动决定）</label>
+          <div id="layoutList"></div>
+          <label class="sec">统一模板结构（分区骨架，所有模板共用）</label>
+          <div id="zoneList"></div>
+          <label class="sec">视觉风格族</label>
+          <div id="familyList"></div>
+          <label class="sec">模板清单</label>
+          <div id="tplList"></div>
+          <label class="sec">场景知识库</label>
+          <div id="sceneList"></div>
+          <label class="sec">保险金融合规规则库</label>
+          <div id="ruleList"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<!-- bridge.js 必须在 app.js 之前：它同步挂上 window 上的运行时常量并开始探测环境，
+     app.js 解析后立刻就会用这个常量。顺序反了 app.js 会走不到后端或引擎。 -->
+<script src="./static/bridge.js"></script>
+<script src="./static/app.js"></script>
+</body>
+</html>

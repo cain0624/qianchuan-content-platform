@@ -1,0 +1,2005 @@
+{
+  "_spec": {
+    "name": "保险/金融直播封面 · 统一模板结构规范",
+    "version": "v4.0",
+    "note": "统一模板结构 × 多平台产出。平台（platform）决定画布规格、平台安全区与推荐的视觉风格族；风格族（family）决定视觉语言；排版模式（layoutMode）由有没有主播半身像决定。三层正交，互不耦合。",
+    "families": [
+      {
+        "id": "classic",
+        "name": "经典稳重",
+        "note": "深色厚底 / 金融专业感，适合中高净值与政企客群"
+      },
+      {
+        "id": "youth",
+        "name": "年轻活力",
+        "note": "浅色渐变底 / 渐变大字 / 星光点缀，适合短视频与私域年轻客群"
+      },
+      {
+        "id": "xhs",
+        "name": "小红书笔记",
+        "platform": "xhs",
+        "note": "浅底大黑字 / 关键词荧光高亮 / 作者行 + 话题标签带，信息流里一眼可读"
+      },
+      {
+        "id": "douyin",
+        "name": "抖音竖屏",
+        "platform": "douyin",
+        "note": "高饱和渐变底 / 超大描边标题 / 话题条 + 页码，按平台安全区内缩排版"
+      }
+    ],
+    "zones": [
+      {
+        "id": "A",
+        "name": "标签条",
+        "role": "类目/领域标签、直播平台感",
+        "limit": "≤12字",
+        "anchor": "top"
+      },
+      {
+        "id": "B",
+        "name": "主标题",
+        "role": "直播主题提炼（核心信息，必须体现主题）",
+        "limit": "≤14字 / 最多2行 / 每行≤7字",
+        "anchor": "upper-middle"
+      },
+      {
+        "id": "C",
+        "name": "副标题",
+        "role": "主题延展、利益点或人群指向",
+        "limit": "≤14字 / 1行",
+        "anchor": "middle"
+      },
+      {
+        "id": "D",
+        "name": "角标徽章",
+        "role": "开播时间 / 预约 / 限量等强引导",
+        "limit": "≤12字",
+        "anchor": "varies"
+      },
+      {
+        "id": "E",
+        "name": "底部信息条",
+        "role": "机构/讲师署名 + 引导语（graphic 版式）",
+        "limit": "≤18字",
+        "anchor": "bottom"
+      },
+      {
+        "id": "F",
+        "name": "人物区",
+        "role": "主播半身像（person 版式）或底部图标卡（graphic 版式）",
+        "limit": "半身像 1 张 / 图标卡 2 枚",
+        "anchor": "bottom-right|bottom-corners"
+      },
+      {
+        "id": "G",
+        "name": "签名胶囊",
+        "role": "机构 Logo + 圆形头像 + 姓名·头衔 ｜ 机构名（person 版式）",
+        "limit": "≤24字，超长自动降级",
+        "anchor": "below-copy"
+      }
+    ],
+    "layoutModes": [
+      {
+        "id": "person",
+        "name": "人物版式",
+        "trigger": "已选择主播半身像",
+        "arrange": "横版左右分栏（文案左 / 人物右）；方版与竖版上下分层（文案上 / 人物下）",
+        "note": "半身像与文案错位排布并在前景之外：人物画在文字下层、底部出血柔化融入背景，主题信息永不被遮挡。未抠底的照片自动降级为拱形人物卡。"
+      },
+      {
+        "id": "graphic",
+        "name": "无人物版式",
+        "trigger": "未选择半身像",
+        "arrange": "文案居中通栏，底部两侧圆角图标卡",
+        "note": "没有人物素材时的兜底排版：文案占据视觉中心，左下主播头像卡 + 右下机构 Logo 卡对应参考图的图标卡语言。"
+      }
+    ],
+    "personGeometry": {
+      "note": "人物版式几何参数，全部相对画布。bleed 为底部出血上限——抠底立绘按 maxWidthRatio 取目标宽度后，多出来的高度从画布底部裁掉，腰际的硬切边落在画布之外；宁可从底部多裁一点，也不让人物缩成小图。topRatio 为人物可占据的最高位置（同时是文案区的下界）；maxWidthRatio 限制人物宽度，保证文案栏宽度足够。未抠底的照片不出血，改为画布内的拱形人物卡。",
+      "wide": {
+        "label": "横版（16:9 / 2.35:1）",
+        "textWidthRatio": 0.53,
+        "topRatio": 0.155,
+        "bleed": 0.16,
+        "maxWidthRatio": 0.46
+      },
+      "square": {
+        "label": "方版（1:1）",
+        "textWidthRatio": 0.86,
+        "topRatio": 0.4,
+        "bleed": 0.34,
+        "maxWidthRatio": 0.62
+      },
+      "tall": {
+        "label": "竖版（9:16 / 3:4）",
+        "textWidthRatio": 0.86,
+        "topRatio": 0.4,
+        "bleed": 0.26,
+        "maxWidthRatio": 0.74
+      }
+    },
+    "typography": {
+      "fontFamilies": {
+        "sans": {
+          "label": "现代黑体（专业/洞察）",
+          "source": "Hiragino Sans GB",
+          "files": {
+            "regular": "fonts/sans-regular.ttf",
+            "bold": "fonts/sans-bold.ttf"
+          },
+          "note": "由系统字体子集化而来（tools/subset_fonts.py），随站点分发，本地与线上同一份字形"
+        },
+        "serif": {
+          "label": "宋体（稳重/岁月感）",
+          "source": "Songti SC",
+          "files": {
+            "regular": "fonts/serif-regular.ttf",
+            "bold": "fonts/serif-bold.ttf"
+          },
+          "note": "同上"
+        }
+      },
+      "scaleByShortSide": {
+        "label": 0.03,
+        "title": 0.112,
+        "subtitle": 0.045,
+        "badge": 0.038,
+        "footer": 0.028
+      }
+    },
+    "safeMargin": 0.072,
+    "sizes": {
+      "1:1": [
+        1080,
+        1080
+      ],
+      "3:4": [
+        1080,
+        1440
+      ],
+      "9:16": [
+        1080,
+        1920
+      ],
+      "16:9": [
+        1920,
+        1080
+      ],
+      "2.35:1": [
+        1800,
+        766
+      ]
+    },
+    "anchorMaterials": {
+      "note": "主播素材库。半身像决定走人物版式还是无人物版式；头像只出现在签名胶囊的圆形小标里；Logo 出现在签名胶囊或底部图标卡。留空都有内置字形兜底。",
+      "roles": [
+        {
+          "id": "portrait",
+          "name": "主播半身像",
+          "slot": "main",
+          "shape": "cutout",
+          "note": "版式主角。建议竖版半身照（头部完整、到腰际）；自动去头顶留白 + 按 0.72 画幅取头肩 + 可选自动抠底"
+        },
+        {
+          "id": "avatar",
+          "name": "主播头像",
+          "slot": "signature",
+          "shape": "circle",
+          "note": "签名胶囊里的圆形小头像，建议正方形正面照，自动方裁"
+        },
+        {
+          "id": "logo",
+          "name": "机构 Logo",
+          "slot": "corner",
+          "shape": "contain",
+          "note": "建议透明底 PNG，自动等比容纳并留白"
+        }
+      ]
+    },
+    "platforms": [
+      {
+        "id": "live",
+        "name": "直播间封面",
+        "kind": "直播",
+        "short": "直播",
+        "sizes": [
+          "1:1",
+          "3:4",
+          "9:16",
+          "16:9",
+          "2.35:1"
+        ],
+        "defaultSizes": [
+          "1:1",
+          "9:16"
+        ],
+        "safeArea": {
+          "top": 0.0,
+          "bottom": 0.0,
+          "note": "直播封面自持画布，无平台 UI 遮挡"
+        },
+        "families": [
+          "classic",
+          "youth"
+        ],
+        "zonesNote": "沿用五分区骨架 + 主播挂件区；有半身像走人物版式，无半身像走无人物版式",
+        "note": "视频号 / 抖音直播 / 企微社群 / 公众号全部复用，按尺寸各出一版。"
+      },
+      {
+        "id": "xhs",
+        "name": "小红书图文",
+        "kind": "图文",
+        "short": "小红书",
+        "sizes": [
+          "3:4",
+          "1:1"
+        ],
+        "defaultSizes": [
+          "3:4"
+        ],
+        "safeArea": {
+          "top": 0.028,
+          "bottom": 0.04,
+          "note": "顶部留作者行，底部留话题标签带；四边再留 6% 出血余量"
+        },
+        "families": [
+          "xhs"
+        ],
+        "zonesNote": "A 作者行 / B 标签条 / C 超大黑体主标题（关键词荧光高亮）/ D 副标题 / E 话题标签带 / F 页码或角标",
+        "note": "笔记首图。竖版 3:4 是信息流里占屏最大的比例，标题必须做到「一屏只读三四个字就懂」。"
+      },
+      {
+        "id": "dy_image",
+        "name": "抖音图文",
+        "kind": "图文",
+        "short": "抖音图文",
+        "sizes": [
+          "3:4"
+        ],
+        "defaultSizes": [
+          "3:4"
+        ],
+        "safeArea": {
+          "top": 0.055,
+          "bottom": 0.085,
+          "note": "顶部避让搜索栏，底部避让文案区与互动条；右下留页码位"
+        },
+        "families": [
+          "douyin"
+        ],
+        "zonesNote": "A 话题条 / B 超大描边主标题（居中）/ C 高亮副标题 / D 角标胶囊 / E 账号行 / F 页码 1/N",
+        "note": "图文轮播首图。第 1 张定点击率，后面几张可复用同一模板换序号继续出图。"
+      },
+      {
+        "id": "dy_video",
+        "name": "抖音视频封面",
+        "kind": "视频",
+        "short": "抖音视频",
+        "sizes": [
+          "9:16"
+        ],
+        "defaultSizes": [
+          "9:16"
+        ],
+        "safeArea": {
+          "top": 0.14,
+          "bottom": 0.22,
+          "note": "顶部 14% 让开状态栏与搜索栏，底部 22% 让开昵称、文案、音乐条与评论框"
+        },
+        "families": [
+          "douyin"
+        ],
+        "zonesNote": "A 话题条 / B 超大描边主标题（居中，落在安全区内）/ D 角标胶囊 / E 账号行 / F 时长角标",
+        "note": "全屏首帧封面。抖音会把封面压在右侧信息栏之下，所有关键文字必须落在安全区内。"
+      }
+    ]
+  },
+  "templates": [
+    {
+      "id": "tpl_trust_navy",
+      "family": "classic",
+      "name": "深蓝金 · 专业信任型",
+      "tagline": "宏观解读 / 利率下行 / 资产配置",
+      "scenes": [
+        "利率",
+        "宏观",
+        "资产配置",
+        "经济",
+        "形势",
+        "通胀",
+        "下行",
+        "政策"
+      ],
+      "fontFamily": "sans",
+      "align": "left",
+      "badgePos": "top-right",
+      "deco": "gold-rule",
+      "palette": {
+        "bgTop": [
+          11,
+          30,
+          60
+        ],
+        "bgBottom": [
+          22,
+          58,
+          106
+        ],
+        "accent": [
+          217,
+          178,
+          106
+        ],
+        "accentSoft": [
+          217,
+          178,
+          106,
+          46
+        ],
+        "text": [
+          255,
+          255,
+          255
+        ],
+        "subtext": [
+          206,
+          220,
+          240
+        ],
+        "label": [
+          217,
+          178,
+          106
+        ],
+        "badgeBg": [
+          217,
+          178,
+          106
+        ],
+        "badgeText": [
+          11,
+          30,
+          60
+        ],
+        "footerText": [
+          150,
+          174,
+          208
+        ]
+      }
+    },
+    {
+      "id": "tpl_guard_warm",
+      "family": "classic",
+      "name": "暖米橙 · 家庭保障型",
+      "tagline": "家庭保障 / 重疾医疗 / 亲子规划",
+      "scenes": [
+        "家庭",
+        "保障",
+        "重疾",
+        "医疗",
+        "孩子",
+        "亲子",
+        "教育金",
+        "老公",
+        "老婆",
+        "大病"
+      ],
+      "fontFamily": "sans",
+      "align": "left",
+      "badgePos": "bottom-left",
+      "deco": "warm-blocks",
+      "palette": {
+        "bgTop": [
+          253,
+          249,
+          243
+        ],
+        "bgBottom": [
+          244,
+          229,
+          210
+        ],
+        "accent": [
+          196,
+          98,
+          45
+        ],
+        "accentSoft": [
+          196,
+          98,
+          45,
+          34
+        ],
+        "text": [
+          43,
+          33,
+          24
+        ],
+        "subtext": [
+          110,
+          92,
+          74
+        ],
+        "label": [
+          176,
+          84,
+          38
+        ],
+        "badgeBg": [
+          196,
+          98,
+          45
+        ],
+        "badgeText": [
+          255,
+          250,
+          244
+        ],
+        "footerText": [
+          140,
+          120,
+          100
+        ]
+      }
+    },
+    {
+      "id": "tpl_insight_teal",
+      "family": "classic",
+      "name": "墨绿数据 · 洞察分析型",
+      "tagline": "数据解读 / 避坑科普 / 投保真相",
+      "scenes": [
+        "数据",
+        "真相",
+        "揭秘",
+        "避坑",
+        "科普",
+        "看懂",
+        "拆解",
+        "误区",
+        "陷阱",
+        "分析",
+        "测评"
+      ],
+      "fontFamily": "sans",
+      "align": "left",
+      "badgePos": "top-right",
+      "deco": "data-grid",
+      "palette": {
+        "bgTop": [
+          6,
+          37,
+          31
+        ],
+        "bgBottom": [
+          12,
+          61,
+          51
+        ],
+        "accent": [
+          79,
+          209,
+          165
+        ],
+        "accentSoft": [
+          79,
+          209,
+          165,
+          42
+        ],
+        "text": [
+          242,
+          251,
+          247
+        ],
+        "subtext": [
+          166,
+          206,
+          194
+        ],
+        "label": [
+          79,
+          209,
+          165
+        ],
+        "badgeBg": [
+          79,
+          209,
+          165
+        ],
+        "badgeText": [
+          6,
+          37,
+          31
+        ],
+        "footerText": [
+          122,
+          168,
+          155
+        ]
+      }
+    },
+    {
+      "id": "tpl_retire_gold",
+      "family": "classic",
+      "name": "暖金岁月 · 养老规划型",
+      "tagline": "养老规划 / 年金险 / 长期现金流",
+      "scenes": [
+        "养老",
+        "退休",
+        "年金",
+        "晚年",
+        "长寿",
+        "养老金",
+        "现金流",
+        "60岁",
+        "银发"
+      ],
+      "fontFamily": "serif",
+      "align": "center",
+      "badgePos": "bottom-left",
+      "deco": "time-arc",
+      "palette": {
+        "bgTop": [
+          42,
+          31,
+          20
+        ],
+        "bgBottom": [
+          74,
+          53,
+          32
+        ],
+        "accent": [
+          232,
+          197,
+          122
+        ],
+        "accentSoft": [
+          232,
+          197,
+          122,
+          44
+        ],
+        "text": [
+          255,
+          246,
+          230
+        ],
+        "subtext": [
+          216,
+          195,
+          164
+        ],
+        "label": [
+          232,
+          197,
+          122
+        ],
+        "badgeBg": [
+          232,
+          197,
+          122
+        ],
+        "badgeText": [
+          42,
+          31,
+          20
+        ],
+        "footerText": [
+          170,
+          145,
+          110
+        ]
+      }
+    },
+    {
+      "id": "tpl_qa_light",
+      "family": "classic",
+      "name": "白蓝明快 · 答疑互动型",
+      "tagline": "集中答疑 / 选购指南 / 新手入门",
+      "scenes": [
+        "答疑",
+        "问答",
+        "怎么选",
+        "新手",
+        "入门",
+        "指南",
+        "问题",
+        "咨询",
+        "直播答疑"
+      ],
+      "fontFamily": "sans",
+      "align": "left",
+      "badgePos": "top-right",
+      "deco": "bubble",
+      "palette": {
+        "bgTop": [
+          255,
+          255,
+          255
+        ],
+        "bgBottom": [
+          232,
+          240,
+          252
+        ],
+        "accent": [
+          31,
+          95,
+          191
+        ],
+        "accentSoft": [
+          31,
+          95,
+          191,
+          30
+        ],
+        "text": [
+          18,
+          35,
+          61
+        ],
+        "subtext": [
+          92,
+          110,
+          138
+        ],
+        "label": [
+          31,
+          95,
+          191
+        ],
+        "badgeBg": [
+          31,
+          95,
+          191
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          128,
+          146,
+          174
+        ]
+      }
+    },
+    {
+      "id": "tpl_youth_violet",
+      "family": "youth",
+      "name": "紫蓝星光 · 灵感活力型",
+      "tagline": "利率趋势 / 资产配置 / 认知升级",
+      "scenes": [
+        "利率",
+        "宏观",
+        "资产配置",
+        "经济",
+        "通胀",
+        "下行",
+        "趋势",
+        "复利",
+        "增额"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "labelStyle": "editorial",
+      "deco": "youth-sparkle",
+      "anchorStyle": "card",
+      "titleStyle": "gradient",
+      "underline": "brush",
+      "badgeStyle": "pill-soft",
+      "palette": {
+        "bgTop": [
+          242,
+          246,
+          255
+        ],
+        "bgBottom": [
+          219,
+          228,
+          251
+        ],
+        "accent": [
+          106,
+          59,
+          255
+        ],
+        "accent2": [
+          59,
+          91,
+          255
+        ],
+        "accentSoft": [
+          106,
+          59,
+          255,
+          34
+        ],
+        "text": [
+          15,
+          23,
+          42
+        ],
+        "subtext": [
+          71,
+          85,
+          105
+        ],
+        "label": [
+          15,
+          23,
+          42
+        ],
+        "badgeBg": [
+          106,
+          59,
+          255
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          100,
+          116,
+          139
+        ],
+        "titleGradient": [
+          [
+            59,
+            91,
+            255
+          ],
+          [
+            139,
+            92,
+            246
+          ]
+        ],
+        "spark": [
+          [
+            59,
+            91,
+            255
+          ],
+          [
+            139,
+            92,
+            246
+          ],
+          [
+            250,
+            204,
+            21
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tpl_youth_cyan",
+      "family": "youth",
+      "name": "青蓝晴空 · 清爽科技型",
+      "tagline": "数据洞察 / 避坑科普 / 工具测评",
+      "scenes": [
+        "数据",
+        "真相",
+        "揭秘",
+        "避坑",
+        "科普",
+        "看懂",
+        "拆解",
+        "误区",
+        "测评",
+        "工具"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "labelStyle": "editorial",
+      "deco": "youth-sparkle",
+      "anchorStyle": "card",
+      "titleStyle": "gradient",
+      "underline": "brush",
+      "badgeStyle": "pill-soft",
+      "palette": {
+        "bgTop": [
+          239,
+          249,
+          255
+        ],
+        "bgBottom": [
+          210,
+          233,
+          251
+        ],
+        "accent": [
+          2,
+          132,
+          199
+        ],
+        "accent2": [
+          14,
+          165,
+          233
+        ],
+        "accentSoft": [
+          14,
+          165,
+          233,
+          34
+        ],
+        "text": [
+          15,
+          23,
+          42
+        ],
+        "subtext": [
+          71,
+          85,
+          105
+        ],
+        "label": [
+          15,
+          23,
+          42
+        ],
+        "badgeBg": [
+          14,
+          165,
+          233
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          100,
+          116,
+          139
+        ],
+        "titleGradient": [
+          [
+            14,
+            165,
+            233
+          ],
+          [
+            43,
+            107,
+            255
+          ]
+        ],
+        "spark": [
+          [
+            14,
+            165,
+            233
+          ],
+          [
+            43,
+            107,
+            255
+          ],
+          [
+            56,
+            189,
+            248
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tpl_youth_coral",
+      "family": "youth",
+      "name": "珊瑚暖阳 · 温暖亲近型",
+      "tagline": "家庭保障 / 亲子规划 / 教育金",
+      "scenes": [
+        "家庭",
+        "保障",
+        "孩子",
+        "亲子",
+        "教育金",
+        "老公",
+        "老婆",
+        "父母",
+        "宝爸",
+        "宝妈"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "labelStyle": "editorial",
+      "deco": "youth-sparkle",
+      "anchorStyle": "card",
+      "titleStyle": "gradient",
+      "underline": "brush",
+      "badgeStyle": "pill-soft",
+      "palette": {
+        "bgTop": [
+          255,
+          245,
+          246
+        ],
+        "bgBottom": [
+          255,
+          223,
+          232
+        ],
+        "accent": [
+          249,
+          115,
+          22
+        ],
+        "accent2": [
+          251,
+          113,
+          133
+        ],
+        "accentSoft": [
+          251,
+          113,
+          133,
+          36
+        ],
+        "text": [
+          15,
+          23,
+          42
+        ],
+        "subtext": [
+          102,
+          77,
+          79
+        ],
+        "label": [
+          15,
+          23,
+          42
+        ],
+        "badgeBg": [
+          249,
+          115,
+          22
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          124,
+          100,
+          100
+        ],
+        "titleGradient": [
+          [
+            251,
+            113,
+            133
+          ],
+          [
+            249,
+            115,
+            22
+          ]
+        ],
+        "spark": [
+          [
+            251,
+            113,
+            133
+          ],
+          [
+            249,
+            115,
+            22
+          ],
+          [
+            250,
+            204,
+            21
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tpl_youth_mint",
+      "family": "youth",
+      "name": "薄荷守护 · 健康安心型",
+      "tagline": "重疾医疗 / 健康管理 / 体检筛查",
+      "scenes": [
+        "重疾",
+        "医疗",
+        "健康",
+        "大病",
+        "住院",
+        "体检",
+        "医保",
+        "药",
+        "癌",
+        "手术"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "labelStyle": "editorial",
+      "deco": "youth-sparkle",
+      "anchorStyle": "card",
+      "titleStyle": "gradient",
+      "underline": "brush",
+      "badgeStyle": "pill-soft",
+      "palette": {
+        "bgTop": [
+          240,
+          253,
+          247
+        ],
+        "bgBottom": [
+          211,
+          245,
+          231
+        ],
+        "accent": [
+          13,
+          148,
+          136
+        ],
+        "accent2": [
+          16,
+          185,
+          129
+        ],
+        "accentSoft": [
+          16,
+          185,
+          129,
+          34
+        ],
+        "text": [
+          15,
+          23,
+          42
+        ],
+        "subtext": [
+          61,
+          92,
+          84
+        ],
+        "label": [
+          15,
+          23,
+          42
+        ],
+        "badgeBg": [
+          13,
+          148,
+          136
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          96,
+          122,
+          113
+        ],
+        "titleGradient": [
+          [
+            16,
+            185,
+            129
+          ],
+          [
+            13,
+            148,
+            136
+          ]
+        ],
+        "spark": [
+          [
+            16,
+            185,
+            129
+          ],
+          [
+            45,
+            212,
+            191
+          ],
+          [
+            250,
+            204,
+            21
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tpl_youth_amber",
+      "family": "youth",
+      "name": "琥珀朝阳 · 财富成长型",
+      "tagline": "养老储备 / 年金规划 / 长期现金流",
+      "scenes": [
+        "养老",
+        "退休",
+        "年金",
+        "晚年",
+        "长寿",
+        "养老金",
+        "现金流",
+        "储蓄",
+        "存钱",
+        "60岁"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "labelStyle": "editorial",
+      "deco": "youth-sparkle",
+      "anchorStyle": "card",
+      "titleStyle": "gradient",
+      "underline": "brush",
+      "badgeStyle": "pill-soft",
+      "palette": {
+        "bgTop": [
+          255,
+          251,
+          240
+        ],
+        "bgBottom": [
+          253,
+          233,
+          200
+        ],
+        "accent": [
+          234,
+          88,
+          12
+        ],
+        "accent2": [
+          245,
+          158,
+          11
+        ],
+        "accentSoft": [
+          245,
+          158,
+          11,
+          38
+        ],
+        "text": [
+          15,
+          23,
+          42
+        ],
+        "subtext": [
+          101,
+          78,
+          48
+        ],
+        "label": [
+          15,
+          23,
+          42
+        ],
+        "badgeBg": [
+          234,
+          88,
+          12
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          130,
+          108,
+          76
+        ],
+        "titleGradient": [
+          [
+            245,
+            158,
+            11
+          ],
+          [
+            234,
+            88,
+            12
+          ]
+        ],
+        "spark": [
+          [
+            245,
+            158,
+            11
+          ],
+          [
+            234,
+            88,
+            12
+          ],
+          [
+            250,
+            204,
+            21
+          ]
+        ]
+      }
+    },
+    {
+      "id": "tpl_xhs_cream",
+      "family": "xhs",
+      "platform": "xhs",
+      "name": "奶白清单 · 干货笔记型",
+      "tagline": "保险科普 / 干货清单 / 认知升级",
+      "scenes": [
+        "利率",
+        "宏观",
+        "资产配置",
+        "经济",
+        "通胀",
+        "下行",
+        "趋势",
+        "复利",
+        "增额",
+        "养老",
+        "重疾",
+        "科普"
+      ],
+      "fontFamily": "sans",
+      "align": "left",
+      "deco": "xhs-paper",
+      "titleStyle": "ink",
+      "highlight": true,
+      "badgeStyle": "ink-pill",
+      "palette": {
+        "bgTop": [
+          255,
+          252,
+          247
+        ],
+        "bgBottom": [
+          255,
+          243,
+          231
+        ],
+        "accent": [
+          255,
+          93,
+          79
+        ],
+        "accent2": [
+          255,
+          138,
+          101
+        ],
+        "accentSoft": [
+          255,
+          93,
+          79,
+          30
+        ],
+        "text": [
+          28,
+          26,
+          24
+        ],
+        "subtext": [
+          112,
+          106,
+          100
+        ],
+        "label": [
+          138,
+          132,
+          126
+        ],
+        "badgeBg": [
+          28,
+          26,
+          24
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          158,
+          152,
+          146
+        ],
+        "highlight": [
+          255,
+          219,
+          105
+        ],
+        "divider": [
+          232,
+          224,
+          214
+        ],
+        "titleGradient": [
+          [
+            28,
+            26,
+            24
+          ],
+          [
+            28,
+            26,
+            24
+          ]
+        ],
+        "topicBg": [
+          255,
+          93,
+          79,
+          238
+        ],
+        "topicFg": [
+          255,
+          255,
+          255
+        ]
+      }
+    },
+    {
+      "id": "tpl_xhs_mint",
+      "family": "xhs",
+      "platform": "xhs",
+      "name": "薄荷手账 · 生活种草型",
+      "tagline": "家庭保障 / 健康安心 / 亲子规划",
+      "scenes": [
+        "家庭",
+        "保障",
+        "健康",
+        "医疗",
+        "孩子",
+        "教育",
+        "亲子",
+        "安心",
+        "储蓄",
+        "工资",
+        "存钱",
+        "钱袋子"
+      ],
+      "fontFamily": "sans",
+      "align": "left",
+      "deco": "xhs-paper",
+      "titleStyle": "ink",
+      "highlight": true,
+      "badgeStyle": "ink-pill",
+      "palette": {
+        "bgTop": [
+          247,
+          253,
+          250
+        ],
+        "bgBottom": [
+          226,
+          245,
+          238
+        ],
+        "accent": [
+          13,
+          168,
+          118
+        ],
+        "accent2": [
+          46,
+          196,
+          152
+        ],
+        "accentSoft": [
+          13,
+          168,
+          118,
+          30
+        ],
+        "text": [
+          19,
+          36,
+          31
+        ],
+        "subtext": [
+          92,
+          118,
+          108
+        ],
+        "label": [
+          120,
+          142,
+          134
+        ],
+        "badgeBg": [
+          19,
+          36,
+          31
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          140,
+          160,
+          152
+        ],
+        "highlight": [
+          167,
+          240,
+          209
+        ],
+        "divider": [
+          214,
+          234,
+          226
+        ],
+        "titleGradient": [
+          [
+            19,
+            36,
+            31
+          ],
+          [
+            19,
+            36,
+            31
+          ]
+        ],
+        "topicBg": [
+          13,
+          168,
+          118,
+          238
+        ],
+        "topicFg": [
+          255,
+          255,
+          255
+        ]
+      }
+    },
+    {
+      "id": "tpl_dy_image_ink",
+      "family": "douyin",
+      "platform": "dy_image",
+      "name": "墨黑霓虹 · 硬核科普型",
+      "tagline": "利率解读 / 宏观趋势 / 认知颠覆",
+      "scenes": [
+        "利率",
+        "宏观",
+        "经济",
+        "通胀",
+        "下行",
+        "政策",
+        "趋势",
+        "复利",
+        "资产配置",
+        "增额"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "deco": "dy-aurora",
+      "titleStyle": "stroke",
+      "badgeStyle": "dy-pill",
+      "pageStyle": "image",
+      "palette": {
+        "bgTop": [
+          13,
+          15,
+          30
+        ],
+        "bgBottom": [
+          38,
+          22,
+          74
+        ],
+        "accent": [
+          34,
+          211,
+          238
+        ],
+        "accent2": [
+          168,
+          85,
+          247
+        ],
+        "accentSoft": [
+          34,
+          211,
+          238,
+          34
+        ],
+        "text": [
+          255,
+          255,
+          255
+        ],
+        "subtext": [
+          196,
+          208,
+          232
+        ],
+        "label": [
+          148,
+          163,
+          196
+        ],
+        "badgeBg": [
+          254,
+          44,
+          85
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          160,
+          174,
+          205
+        ],
+        "strokeColor": [
+          6,
+          8,
+          20
+        ],
+        "highlight": [
+          250,
+          204,
+          21
+        ],
+        "divider": [
+          52,
+          40,
+          92
+        ],
+        "titleGradient": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            206,
+            226,
+            255
+          ]
+        ],
+        "spark": [
+          [
+            34,
+            211,
+            238
+          ],
+          [
+            168,
+            85,
+            247
+          ],
+          [
+            250,
+            204,
+            21
+          ]
+        ],
+        "topicBg": [
+          34,
+          211,
+          238,
+          232
+        ],
+        "topicFg": [
+          8,
+          14,
+          30
+        ]
+      }
+    },
+    {
+      "id": "tpl_dy_image_lemon",
+      "family": "douyin",
+      "platform": "dy_image",
+      "name": "柠檬高饱和 · 吸睛图文型",
+      "tagline": "避坑指南 / 清单盘点 / 强对比",
+      "scenes": [
+        "避坑",
+        "踩坑",
+        "清单",
+        "对比",
+        "误区",
+        "真相",
+        "骗局",
+        "买保险",
+        "怎么选"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "deco": "dy-rays",
+      "titleStyle": "stroke",
+      "badgeStyle": "dy-pill",
+      "pageStyle": "image",
+      "palette": {
+        "bgTop": [
+          255,
+          238,
+          158
+        ],
+        "bgBottom": [
+          255,
+          198,
+          22
+        ],
+        "accent": [
+          255,
+          45,
+          85
+        ],
+        "accent2": [
+          255,
+          128,
+          20
+        ],
+        "accentSoft": [
+          255,
+          45,
+          85,
+          34
+        ],
+        "text": [
+          26,
+          20,
+          6
+        ],
+        "subtext": [
+          92,
+          68,
+          20
+        ],
+        "label": [
+          120,
+          92,
+          32
+        ],
+        "badgeBg": [
+          255,
+          45,
+          85
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          128,
+          100,
+          36
+        ],
+        "strokeColor": [
+          255,
+          252,
+          244
+        ],
+        "highlight": [
+          255,
+          68,
+          68
+        ],
+        "divider": [
+          234,
+          190,
+          60
+        ],
+        "titleGradient": [
+          [
+            26,
+            20,
+            6
+          ],
+          [
+            26,
+            20,
+            6
+          ]
+        ],
+        "topicBg": [
+          255,
+          255,
+          255,
+          240
+        ],
+        "topicFg": [
+          26,
+          20,
+          6
+        ]
+      }
+    },
+    {
+      "id": "tpl_dy_video_aurora",
+      "family": "douyin",
+      "platform": "dy_video",
+      "name": "极光渐变 · 视频首帧型",
+      "tagline": "趋势解读 / 认知升级 / 高势能",
+      "scenes": [
+        "利率",
+        "宏观",
+        "趋势",
+        "资产配置",
+        "经济",
+        "通胀",
+        "下行",
+        "复利",
+        "增额",
+        "政策"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "deco": "dy-aurora",
+      "titleStyle": "stroke",
+      "badgeStyle": "dy-pill",
+      "pageStyle": "video",
+      "palette": {
+        "bgTop": [
+          10,
+          18,
+          52
+        ],
+        "bgBottom": [
+          92,
+          28,
+          138
+        ],
+        "accent": [
+          56,
+          189,
+          248
+        ],
+        "accent2": [
+          232,
+          121,
+          249
+        ],
+        "accentSoft": [
+          56,
+          189,
+          248,
+          34
+        ],
+        "text": [
+          255,
+          255,
+          255
+        ],
+        "subtext": [
+          206,
+          220,
+          248
+        ],
+        "label": [
+          154,
+          172,
+          212
+        ],
+        "badgeBg": [
+          254,
+          44,
+          85
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          168,
+          184,
+          220
+        ],
+        "strokeColor": [
+          8,
+          12,
+          36
+        ],
+        "highlight": [
+          253,
+          224,
+          71
+        ],
+        "divider": [
+          58,
+          44,
+          104
+        ],
+        "titleGradient": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            196,
+            226,
+            255
+          ]
+        ],
+        "spark": [
+          [
+            56,
+            189,
+            248
+          ],
+          [
+            232,
+            121,
+            249
+          ],
+          [
+            253,
+            224,
+            71
+          ]
+        ],
+        "topicBg": [
+          56,
+          189,
+          248,
+          232
+        ],
+        "topicFg": [
+          8,
+          14,
+          30
+        ]
+      }
+    },
+    {
+      "id": "tpl_dy_video_sunset",
+      "family": "douyin",
+      "platform": "dy_video",
+      "name": "日落橙红 · 视频首帧型",
+      "tagline": "家庭保障 / 养老规划 / 温暖向",
+      "scenes": [
+        "家庭",
+        "保障",
+        "养老",
+        "退休",
+        "孩子",
+        "教育",
+        "医疗",
+        "健康",
+        "安心",
+        "钱袋子"
+      ],
+      "fontFamily": "sans",
+      "align": "center",
+      "deco": "dy-rays",
+      "titleStyle": "stroke",
+      "badgeStyle": "dy-pill",
+      "pageStyle": "video",
+      "palette": {
+        "bgTop": [
+          255,
+          108,
+          62
+        ],
+        "bgBottom": [
+          214,
+          26,
+          92
+        ],
+        "accent": [
+          255,
+          214,
+          102
+        ],
+        "accent2": [
+          255,
+          255,
+          255
+        ],
+        "accentSoft": [
+          255,
+          214,
+          102,
+          40
+        ],
+        "text": [
+          255,
+          255,
+          255
+        ],
+        "subtext": [
+          255,
+          232,
+          220
+        ],
+        "label": [
+          255,
+          214,
+          198
+        ],
+        "badgeBg": [
+          28,
+          20,
+          24
+        ],
+        "badgeText": [
+          255,
+          255,
+          255
+        ],
+        "footerText": [
+          255,
+          216,
+          206
+        ],
+        "strokeColor": [
+          128,
+          18,
+          46
+        ],
+        "highlight": [
+          255,
+          233,
+          130
+        ],
+        "divider": [
+          255,
+          168,
+          140
+        ],
+        "titleGradient": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            236,
+            210
+          ]
+        ],
+        "spark": [
+          [
+            255,
+            214,
+            102
+          ],
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            137,
+            96
+          ]
+        ],
+        "topicBg": [
+          255,
+          255,
+          255,
+          240
+        ],
+        "topicFg": [
+          255,
+          64,
+          96
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+[
+  {
+    "id": "as_demo_host",
+    "role": "avatar",
+    "roleName": "主播头像",
+    "name": "林晓",
+    "title": "资深保险规划师",
+    "note": "内置示例素材，可直接删掉",
+    "file": "as_demo_host_示例主播头像.png",
+    "url": "/assets/as_demo_host_示例主播头像.png",
+    "w": 512,
+    "h": 512,
+    "bytes": 3281,
+    "ts": "2026-09-20 13:47:00",
+    "builtin": true
+  },
+  {
+    "id": "as_demo_logo",
+    "role": "logo",
+    "roleName": "机构 Logo",
+    "name": "安心保险研究院",
+    "title": "",
+    "note": "内置示例素材，可直接删掉",
+    "file": "as_demo_logo_示例机构标识.png",
+    "url": "/assets/as_demo_logo_示例机构标识.png",
+    "w": 512,
+    "h": 512,
+    "bytes": 2106,
+    "ts": "2026-09-20 13:47:00",
+    "builtin": true
+  },
+  {
+    "id": "as_demo_portrait",
+    "role": "portrait",
+    "roleName": "主播半身像",
+    "name": "林晓",
+    "title": "资深保险规划师",
+    "note": "内置主播半身像（真人照，已去背），可直接删掉",
+    "file": "as_demo_portrait_示例主播半身像.png",
+    "url": "/assets/as_demo_portrait_示例主播半身像.png",
+    "w": 568,
+    "h": 872,
+    "aspect": 0.6514,
+    "cutout": true,
+    "bytes": 502272,
+    "ts": "2026-09-20 15:59:55",
+    "builtin": true
+  }
+]

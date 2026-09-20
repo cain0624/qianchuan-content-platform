@@ -1,0 +1,56 @@
+{
+ "generatedBy": "tools/build_site.py",
+ "repo": "cain0624/qianchuan-content-platform",
+ "bases": [
+  "https://cdn.jsdelivr.net/gh/cain0624/qianchuan-content-platform@main/",
+  "./"
+ ],
+ "core": [
+  "assets/_builtin/portrait.png",
+  "assets/as_demo_host_示例主播头像.png",
+  "assets/as_demo_logo_示例机构标识.png",
+  "assets/as_demo_portrait_示例主播半身像.png",
+  "assets/assets.json",
+  "core/assets.py",
+  "core/copywriter.py",
+  "core/guard.py",
+  "core/harness.py",
+  "core/llm.py",
+  "core/renderer.py",
+  "core/segmenter.py",
+  "core/trace.py",
+  "data/compliance.json",
+  "data/knowledge.json",
+  "data/templates.json"
+ ],
+ "fonts": {
+  "sans": [
+   {
+    "rel": "fonts/sans-bold.ttf",
+    "gz": true,
+    "bytes": 2632116,
+    "gzBytes": 2389258
+   },
+   {
+    "rel": "fonts/sans-regular.ttf",
+    "gz": true,
+    "bytes": 2570076,
+    "gzBytes": 2310406
+   }
+  ],
+  "serif": [
+   {
+    "rel": "fonts/serif-bold.ttf",
+    "gz": true,
+    "bytes": 3012712,
+    "gzBytes": 2047000
+   },
+   {
+    "rel": "fonts/serif-regular.ttf",
+    "gz": true,
+    "bytes": 2907500,
+    "gzBytes": 1965718
+   }
+  ]
+ }
+}
